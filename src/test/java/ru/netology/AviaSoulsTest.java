@@ -68,4 +68,44 @@ public class AviaSoulsTest {
 
         Assertions.assertArrayEquals(new Ticket[]{ticket1, ticket2, ticket3}, searchResult);
     }
+
+    @Test // Тест на поиск одного подходящего билета
+    public void singleTicketTest() {
+        Ticket ticket1 = new Ticket("Москва", "Санкт-Петербург", 15000, 12_00, 14_00);
+
+        AviaSouls manager = new AviaSouls();
+        manager.add(ticket1);
+
+        Ticket[] result = manager.search("Москва", "Санкт-Петербург");
+        Assertions.assertArrayEquals(new Ticket[]{ticket1}, result);
+    }
+
+    @Test // Тест на поиск нескольких подходящих билетов
+    public void ticketMultipleSearchTest() {
+        Ticket ticket1 = new Ticket("Санкт-Петербург", "Москва", 12000, 12_20, 13_55);
+        Ticket ticket2 = new Ticket("Санкт-Петербург", "Казань", 16000, 10_40, 13_00);
+        Ticket ticket3 = new Ticket("Казань", "Москва", 14000, 12_15, 14_35);
+        Ticket ticket4 = new Ticket("Санкт-Петербург", "Москва", 13000, 14_00, 16_30);
+
+        AviaSouls manager = new AviaSouls();
+        manager.add(ticket1);
+        manager.add(ticket2);
+        manager.add(ticket3);
+        manager.add(ticket4);
+
+        Ticket[] searchResult = manager.search("Санкт-Петербург", "Москва");
+
+        Assertions.assertArrayEquals(new Ticket[]{ticket1, ticket4}, searchResult);
+    }
+
+        @Test // Тест когда подходящих билетов нет
+    public void noTicketsSearchTest() {
+        Ticket ticket1 = new Ticket("Москва", "Санкт-Петербург", 12000, 12_20, 13_55);
+        AviaSouls manager = new AviaSouls();
+        manager.add(ticket1);
+
+        Ticket[] searchResult = manager.search("Санкт-Петербург", "Казань");
+
+        Assertions.assertArrayEquals(new Ticket[]{}, searchResult);
+    }
 }
